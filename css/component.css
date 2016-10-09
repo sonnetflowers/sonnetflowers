@@ -273,6 +273,10 @@ figure.photostack-current{
 	transition: all .2s ease-in-out;
 }
 
+/*.js .photostack .photostack-current img{
+	height: 375px !important;
+}*/
+
 /*figure.photostack-current:hover{
 	transform: scale(1.3)  translate(305px, 276px) rotate(0deg) !important;
 }*/

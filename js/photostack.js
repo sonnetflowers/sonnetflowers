@@ -169,10 +169,11 @@
 	Photostack.prototype._initEvents = function() {
 		var self = this,
 			beforeStep = classie.hasClass( this.el, 'photostack-start' );
-
+			console.log('beforeStep', beforeStep);
 		if( beforeStep ) {
 			this._shuffle();
 			this.el.addEventListener( 'click', function() {
+				console.log('beforeStep1', beforeStep);
 				self._open(beforeStep);
 			});
 		}
@@ -185,6 +186,7 @@
 				dot.addEventListener( 'click', function() {
 					// rotate the photo if clicking on the current dot
 					if( idx === self.current ) {
+						console.log('selfie',self);
 						self._rotateItem();
 					}
 					else {
@@ -361,9 +363,10 @@
 						};
 
 					if(self.items.indexOf(item) === self.current && self.started && iter === 0) {
-						self.currentItem.style.WebkitTransform = 'translate(' + self.centerItem.x + 'px,' + self.centerItem.y + 'px) rotate(0deg)';
-						self.currentItem.style.msTransform = 'translate(' + self.centerItem.x + 'px,' + self.centerItem.y + 'px) rotate(0deg)';
-						self.currentItem.style.transform = 'translate(' + self.centerItem.x + 'px,' + self.centerItem.y + 'px) rotate(0deg)';
+						var transform = 'translate(' + self.centerItem.x + 'px,' + self.centerItem.y + 'px) rotate(0deg)';
+						self.currentItem.style.WebkitTransform =
+						self.currentItem.style.msTransform = 
+						self.currentItem.style.transform = transform;
 						// if there is something behind..
 						if( self.currentItem.querySelector( '.photostack-back' ) ) {
 							self._addItemPerspective();
@@ -411,9 +414,9 @@
 			inner : { width : this.inner.offsetWidth, height : this.inner.offsetHeight },
 			item : { width : this.currentItem.offsetWidth, height : this.currentItem.offsetHeight }
 		};
-		
+
 		// translation values to center an item
-		this.centerItem = { x : this.sizes.inner.width / 2 - this.sizes.item.width / 2, y : this.sizes.inner.height / 2 - this.sizes.item.height / 2 };
+		this.centerItem = { x : this.sizes.inner.width / 2 - this.sizes.item.width / 2, y : this.sizes.inner.height / 3 - this.sizes.item.height / 2 };
 	}
 
 	Photostack.prototype._isOverlapping = function( itemVal ) {
@@ -431,7 +434,7 @@
 				// move left / or move right
 				var left = Math.random() < 0.5,
 					randExtraX = Math.floor( Math.random() * (dxItem/4 + 1) ),
-					randExtraY = Math.floor( Math.random() * (dyItem/4 + 1) ),
+					randExtraY = Math.floor( Math.random() * (dyItem/4 + 1) )-500,
 					noOverlapX = left ? (itemVal.x - areaVal.x + dxItem) * -1 - randExtraX : (areaVal.x + dxArea) - (itemVal.x + dxItem) + dxItem + randExtraX,
 					noOverlapY = left ? (itemVal.y - areaVal.y + dyItem) * -1 - randExtraY : (areaVal.y + dyArea) - (itemVal.y + dyItem) + dyItem + randExtraY;
 
