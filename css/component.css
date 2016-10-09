@@ -17,7 +17,15 @@
 }
 
 .js .photostack {
-	height: 580px;
+	flex: 1;
+	height: calc( 100vh - 308px);
+	/*background: url('http://www.cssauthor.com/wp-content/uploads/2012/12/Wood-Textures-6.png?3ec550');*/
+	background: none;
+	overflow: visible;
+}
+
+.photostack > div{
+	/*background: rgba(21, 20, 20, 0.85);*/
 }
 
 .photostack-start {
@@ -34,34 +42,55 @@
 }
 
 .photostack figure {
-	width: 320px;
-	height: 360px;
 	position: relative;
 	display: inline-block;
 	background: #fff;
-	padding: 40px;
 	text-align: center;
 	margin: 5px;
+	padding: 15px;
+	background: #eee6d8; /*fallback colour for browsers that don't support gradients*/
+    background:
+    	-webkit-linear-gradient(top, #e8e2d6, #eaeaea 20%, #f2ebde 60%),
+    	 url('https://www.transparenttextures.com/patterns/soft-wallpaper.png');
+	background:
+		-moz-linear-gradient(top, #e8e2d6, #eaeaea 20%, #f2ebde 60%),
+		 url('https://www.transparenttextures.com/patterns/soft-wallpaper.png');
+	background:
+		-o-linear-gradient(top, #e8e2d6, #eaeaea 20%, #f2ebde 60%),
+		 url('https://www.transparenttextures.com/patterns/soft-wallpaper.png');
+	background:
+		-ms-linear-gradient(top, #e8e2d6, #eaeaea 20%, #f2ebde 60%),
+		 url('https://www.transparenttextures.com/patterns/soft-wallpaper.png');
+	background:
+		linear-gradient(top, #e8e2d6, #eaeaea 20%, #f2ebde 60%),
+		 url('https://www.transparenttextures.com/patterns/soft-wallpaper.png');
 }
 
 .js .photostack figure {
 	position: absolute;
 	display: block;
 	margin: 0;
+	-webkit-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, 0.9);
+	-moz-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, 0.9);
+	box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, 0.9);
 }
 
 .photostack figcaption h2 {
-	margin: 20px 0 0 0;
-	color: #a7a0a2;
-	font-size: 16px;
+	margin: 10px 0;
+	color: #333;
+	margin-bottom: 10px;
+	font-family: 'christopherhand';
+	font-size: 33px;
+   font-weight: normal;
+   font-style: normal;
 }
 
 .photostack-img {
 	outline: none;
 	display: block;
-	width: 240px;
-	height: 240px;
-	background: #f9f9f9;
+}
+.photostack-img img{
+	height: 300px;
 }
 
 .photostack-back {
@@ -104,13 +133,16 @@
 .photostack-start nav {
 	opacity: 0;
 }
- 
+
 .photostack nav span {
 	position: relative;
 	display: inline-block;
 	margin: 0 5px;
-	width: 30px;
-	height: 30px;
+	width: 70px;
+	height: 70px;
+	-webkit-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, 0.9);
+	-moz-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, 0.9);
+	box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, 0.9);
 	cursor: pointer;
 	background: #aaa;
 	border-radius: 50%;
@@ -128,7 +160,9 @@
 .photostack nav span::after {
 	content: "\e600";
 	font-family: 'icons';
-	font-size: 80%;
+	font-size: 40px;
+	position: relative;
+	top: 19px;
 	speak: none;
 	display: inline-block;
 	vertical-align: top;
@@ -233,6 +267,15 @@
 	-webkit-transition: opacity 0.6s;
 	transition: opacity 0.6s;
 }
+
+figure.photostack-current{
+	z-index: 10;
+	transition: all .2s ease-in-out;
+}
+
+/*figure.photostack-current:hover{
+	transform: scale(1.3)  translate(305px, 276px) rotate(0deg) !important;
+}*/
 
 /* Hide figure overlay when it becomes current */
 figure.photostack-current::after {
