@@ -18,7 +18,7 @@
 
 .js .photostack {
 	flex: 1;
-	height: calc( 100vh - 308px);
+	height: calc( 100vh - 268px);
 	/*background: url('http://www.cssauthor.com/wp-content/uploads/2012/12/Wood-Textures-6.png?3ec550');*/
 	background: none;
 	overflow: visible;
@@ -183,8 +183,8 @@
 
 .photostack nav span.current {
 	background: #888;
-	-webkit-transform: scale(1);
-	transform: scale(1);
+	-webkit-transform: scale(0.7);
+	transform: scale(0.7);
 }
 
 .photostack nav span.current.flip {

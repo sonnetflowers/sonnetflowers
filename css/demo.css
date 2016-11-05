@@ -1,7 +1,39 @@
-@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700|Give+You+Glory);
+@import url(//fonts.googleapis.com/css?family=Lato:300,400,700|Give+You+Glory);
+
+h1.main-title{
+	text-align: center;
+	font-family:"fabfeltscript";
+	font-size: 90px;
+	margin-top: -10px;
+	margin-bottom: 20px;
+	color: #666;
+}
 
 
-
+@font-face {
+    font-family: 'Debby';
+        src: url('/fonts/Debby.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'fabfeltscript';
+        src: url('/fonts/fabfeltscript-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lavanderia';
+        src: url('/fonts/LavanderiaSturdy.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Anke';
+        src: url('/fonts/ankecallig-fg.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 @font-face {
     font-family: 'TheWoodLands';
         src: url('/fonts/TheWoodlands-Regular.otf') format('truetype');
@@ -22,6 +54,12 @@
 	padding: 0;
 }
 
+
+.main-text{
+	padding: 300px;
+	padding-top: 0;
+}
+
 @media all and (min-width: 300px) {
   .container {
 	overflow-y: hidden;
@@ -32,21 +70,7 @@
 .menu{
 	text-align: center;
 	padding: 20px;
-}
-
-h1.main-title{
-	text-align: center;
-	font-family:"TheWoodLands";
-	font-size: 90px;
-	margin-top: -10px;
-	margin-bottom: 20px;
-	color: #666;
-}
-
-
-
-nav ul{
-	margin-bottom: 100px;
+	padding-bottom: 100px;
 }
 
 nav ul li{
@@ -104,7 +128,7 @@ body {
 	clear: both;
 }
 
-a {
+a, a:visited, a:focus {
 	color: #8e888a;
 	text-decoration: none;
 	outline: none;

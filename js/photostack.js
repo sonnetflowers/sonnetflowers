@@ -87,7 +87,15 @@
 	function Photostack( el, options ) {
 		this.el = el;
 		this.inner = this.el.querySelector( 'div' );
-		this.allItems = [].slice.call( this.inner.children );
+		var children = this.inner.children;
+		// console.log('iccc',this.inner.children);
+		var photos = [];
+		for( var i = 0; i < children.length; i++ ) {
+			// console.log('childddsssdsd', children[i].tagName);
+			if(children[i].tagName === 'FIGURE')
+				photos.push(children[i]);
+		}
+		this.allItems = [].slice.call( photos );
 		this.allItemsCount = this.allItems.length;
 		if( !this.allItemsCount ) return;
 		this.items = [].slice.call( this.inner.querySelectorAll( 'figure:not([data-dummy])' ) );
@@ -110,6 +118,12 @@
   		navigate: function(dir) {
   			ps._navigate.call(ps, dir);
   		},
+  		clearMiddle: function(){
+  			ps._clearMiddle.call(ps);
+  		},
+  		shuffle: function(){
+  			ps._shuffle.call(ps, true);
+  		}
   	}
 	}
 
@@ -184,6 +198,7 @@
 		if(this.options.showNavigation) {
 			this.navDots.forEach( function( dot, idx ) {
 				dot.addEventListener( 'click', function() {
+					console.log('clickerrrrrrrr', dot, idx);
 					// rotate the photo if clicking on the current dot
 					if( idx === self.current ) {
 						console.log('selfie',self);
@@ -204,6 +219,19 @@
 		}
 
 		window.addEventListener( 'resize', function() { self._resizeHandler(); } );
+	}
+
+	Photostack.prototype._clearMiddle = function(){
+		var self = this;
+		self._shuffle( true, true );
+		document.querySelector('.photostack-current').style.display = 'none';
+		// document.querySelector('.photostack nav').style.display = 'none';
+	}
+
+	Photostack.prototype._reshow = function(){
+		if(document.querySelector('.photostack-current'))
+			document.querySelector('.photostack-current').style.display = '';
+		// document.querySelector('.photostack nav').style.display = '';
 	}
 
 	Photostack.prototype._resizeHandler = function() {
@@ -230,9 +258,14 @@
 	}
 
 	Photostack.prototype._showPhoto = function( pos ) {
+		console.log('show the phoooo')
+		this._reshow();
+		console.log('is shufffffling check', this.isShuffling)
+
 		if( this.isShuffling ) {
 			return false;
 		}
+
 		this.isShuffling = true;
 
 		// if there is something behind..
@@ -247,6 +280,7 @@
 			classie.removeClass( this.navDots[ this.current ], 'current' );
 		}
 		classie.removeClass( this.currentItem, 'photostack-current' );
+		console.log('preeee change currerent')
 		
 		// change current
 		this.current = pos;
@@ -261,6 +295,7 @@
 			classie.addClass( this.navDots[ pos ], 'flippable' );
 		}
 
+		console.log('preeee shufffe')
 		// shuffle a bit
 		this._shuffle();
 
@@ -270,7 +305,7 @@
 	}
 
 	// display items (randomly)
-	Photostack.prototype._shuffle = function( resize ) {
+	Photostack.prototype._shuffle = function( resize, clearCenter ) {
 		var iter = resize ? 1 : this.currentItem.getAttribute( 'data-shuffle-iteration' ) || 1;
 		if( iter <= 0 || !this.started || this.openDefault ) { iter = 1; }
 		// first item is open by default
@@ -278,10 +313,13 @@
 			// change transform-origin
 			classie.addClass( this.currentItem, 'photostack-flip' );
 			this.openDefault = false;
+			console.log('is shuffling to false h1')
 			this.isShuffling = false;
+		}else{
+			console.log('is shuffling to false h1 notttt')
 		}
-		
-		var overlapFactor = .5,
+
+		var overlapFactor = 0.5,
 			// lines & columns
 			lines = Math.ceil(this.sizes.inner.width / (this.sizes.item.width * overlapFactor) ),
 			columns = Math.ceil(this.sizes.inner.height / (this.sizes.item.height * overlapFactor) ),
@@ -320,45 +358,48 @@
 							}
 						}
 
-						col[ j ] = { x : xVal + olx, y : yVal + oly };
+						col[ j ] = { x : xVal , y : yVal + oly };
 					}
 				}
 				// shuffle
-				grid = shuffleMArray(grid);
+				if(!clearCenter)
+					grid = shuffleMArray(grid);
 
-				var l = 0, c = 0, cntItemsAnim = 0;
+				var cntItemsAnim = 0;
 				self.allItems.forEach( function( item, i ) {
-					// pick a random item from the grid
-					if( l === lines - 1 ) {
-						c = c === columns - 1 ? 0 : c + 1;
-						l = 1;
-					}
-					else {
-						++l
-					}
 
-					var randXPos = Math.floor( Math.random() * lines ),
-						randYPos = Math.floor( Math.random() * columns ),
-						gridVal = grid[c][l-1],
-						translation = { x : gridVal.x, y : gridVal.y },
+					var l =  Math.floor( Math.random() * lines ),
+						c = Math.floor( Math.random() * columns );
+					// console.log('logger', l, lines);
+					if(clearCenter)
+						l = Math.random() > 0.5 ? 0 : lines-1;
+					var gridVal = grid[c][l];
+					// console.log('gridvalllll',gridVal);
+					var	translation = { x : gridVal.x, y : gridVal.y },
 						onEndTransitionFn = function() {
 							++cntItemsAnim;
 							if( support.transitions ) {
 								this.removeEventListener( transEndEventName, onEndTransitionFn );
 							}
-							if( cntItemsAnim === self.allItemsCount ) {
+							console.log('countttts', iter, cntItemsAnim, self.allItemsCount, self.allItemsCount-1, clearCenter);
+							if( cntItemsAnim === self.allItemsCount ||  cntItemsAnim === self.allItemsCount-1 ) {
 								if( iter > 0 ) {
 									moveItems.call();
 								}
 								else {
 									// change transform-origin
 									classie.addClass( self.currentItem, 'photostack-flip' );
+									console.log('is shuffling to false h2')
 									// all done..
 									self.isShuffling = false;
 									if( typeof self.options.callback === 'function' ) {
 										self.options.callback( self.currentItem );
 									}
 								}
+								console.log('is shuffling to false h2 not inner')
+
+							}else{
+								console.log('is shuffling to false h2 not outer')
 							}
 						};
 
@@ -416,20 +457,26 @@
 		};
 
 		// translation values to center an item
-		this.centerItem = { x : this.sizes.inner.width / 2 - this.sizes.item.width / 2, y : this.sizes.inner.height / 3 - this.sizes.item.height / 2 };
+		this.centerItem = {
+			x : this.sizes.inner.width / 2 - this.sizes.item.width / 2,
+			y : this.sizes.inner.height / 3 - this.sizes.item.height / 2
+		};
 	}
 
 	Photostack.prototype._isOverlapping = function( itemVal ) {
+		//dx/dyArea is middleArea size
+		// areaVal is the points of the middle areas
+		// dx/dy item is the size of the item
+
 		var dxArea = this.sizes.item.width + this.sizes.item.width / 3, // adding some extra avoids any rotated item to touch the central area
 			dyArea = this.sizes.item.height + this.sizes.item.height / 3,
 			areaVal = { x : this.sizes.inner.width / 2 - dxArea / 2, y : this.sizes.inner.height / 2 - dyArea / 2 },
 			dxItem = this.sizes.item.width,
 			dyItem = this.sizes.item.height;
 
-		if( !(( itemVal.x + dxItem ) < areaVal.x ||
-			itemVal.x > ( areaVal.x + dxArea ) ||
-			( itemVal.y + dyItem ) < areaVal.y ||
-			itemVal.y > ( areaVal.y + dyArea )) ) {
+		if(
+			true
+		) {
 				// how much to move so it does not overlap?
 				// move left / or move right
 				var left = Math.random() < 0.5,
